@@ -2,6 +2,8 @@
 
 Halo is a native macOS menu bar companion for Spotify. It shows time-synced lyrics and optional audio-reactive ambient lighting while Spotify remains the playback app.
 
+**Website:** https://zeiprone.github.io/Halo/
+
 ![Platform](https://img.shields.io/badge/platform-macOS%2015%2B-000000?logo=apple&logoColor=white)
 ![Swift](https://img.shields.io/badge/Swift-6.0-F05138?logo=swift&logoColor=white)
 [![CI](https://github.com/zeiprone/Halo/actions/workflows/ci.yml/badge.svg)](https://github.com/zeiprone/Halo/actions/workflows/ci.yml)
