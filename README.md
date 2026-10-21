@@ -8,6 +8,20 @@ Halo is a native macOS menu bar companion for Spotify. It shows time-synced lyri
 ![Swift](https://img.shields.io/badge/Swift-6.0-F05138?logo=swift&logoColor=white)
 [![CI](https://github.com/zeiprone/Halo/actions/workflows/ci.yml/badge.svg)](https://github.com/zeiprone/Halo/actions/workflows/ci.yml)
 
+## Preview
+
+Halo keeps Spotify as the player while bringing lyrics and reactive light to your desktop.
+
+| Resting lyrics overlay | Audio-reactive lyrics overlay |
+| --- | --- |
+| ![Lyrics overlay at rest](docs/images/lyrics-overlay-rest.png) | ![Lyrics overlay responding to a beat](docs/images/lyrics-overlay-reactive.png) |
+
+<p align="center">
+  <img src="docs/images/lyrics-overlay-compact.png" alt="Compact lyrics overlay" width="640">
+</p>
+
+These previews are rendered by Halo's SwiftUI visual check with local fixture lyrics; they do not use a Spotify account or upload audio.
+
 ## What it does
 
 - Reads local Spotify playback metadata and provides playback controls through macOS Automation.
@@ -21,8 +35,9 @@ Halo is an independent project and is not affiliated with Spotify. Spotify is re
 ## Requirements
 
 - macOS 15 or later
-- Xcode 16 or later, including Command Line Tools
 - Spotify desktop app
+
+Building from source additionally requires Xcode 16 or later, including Command Line Tools.
 
 ## Run from source
 

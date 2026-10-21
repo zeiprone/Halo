@@ -16,6 +16,3 @@ All notable changes to Halo are documented in this file. The project follows [Se
 - Synchronized lyric overlays with editorial, focus, and fisheye presentation modes.
 - Audio-reactive ambient lighting using in-memory Spotify audio analysis.
 - Album-art palette extraction, multi-display overlays, and per-track lyric offsets.
-
-[Unreleased]: https://github.com/zeiprone/Halo/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/zeiprone/Halo/releases/tag/v0.3.0

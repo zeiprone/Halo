@@ -77,7 +77,9 @@ case "$MODE" in
     echo "$APP_BUNDLE"
     ;;
   --render-check)
-    /usr/bin/open -n "$APP_BUNDLE" --args --render-check
+    # RenderChecks terminates the app after writing its PNGs. Waiting here makes
+    # this mode suitable for repeatable documentation and CI visual captures.
+    /usr/bin/open -W -n "$APP_BUNDLE" --args --render-check
     ;;
   run)
     open_app
