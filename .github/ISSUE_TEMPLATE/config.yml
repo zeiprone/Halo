@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Ask a question or share an idea
+    url: https://github.com/zeiprone/Halo/discussions
+    about: Use Discussions for setup questions, feedback, and project ideas.
   - name: Security vulnerability
     url: https://github.com/zeiprone/Halo/security/advisories/new
     about: Please report potential vulnerabilities privately.

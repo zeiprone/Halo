@@ -1,7 +1,7 @@
 name: Feature request
 description: Suggest an improvement to Halo.
 title: "feature: "
-labels: [enhancement]
+labels: [enhancement, "status: needs triage"]
 body:
   - type: textarea
     id: problem

@@ -1,7 +1,7 @@
 name: Bug report
 description: Report reproducible behavior that differs from expectations.
 title: "bug: "
-labels: [bug]
+labels: [bug, "status: needs triage"]
 body:
   - type: markdown
     attributes:
@@ -19,9 +19,20 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Start Spotify
+        1. Start Spotify or YouTube Music
         2. Open Halo
         3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Music source
+      options:
+        - Spotify desktop app
+        - YouTube Music in Safari
+        - YouTube Music in Google Chrome
+        - No source / unrelated
     validations:
       required: true
   - type: input

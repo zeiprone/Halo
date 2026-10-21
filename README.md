@@ -111,7 +111,7 @@ See [the architecture notes](docs/ARCHITECTURE.md) for the design and [the feasi
 
 ## Contributing
 
-Bug reports, documentation improvements, tests, and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Bug reports, documentation improvements, tests, and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md), browse the [roadmap](ROADMAP.md), and follow the [Code of Conduct](CODE_OF_CONDUCT.md). Use [GitHub Discussions](https://github.com/zeiprone/Halo/discussions) for questions, ideas, and showcases.
 
 ## Security
 
