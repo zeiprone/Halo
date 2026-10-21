@@ -12,7 +12,8 @@ NOTARY_PROFILE="${HALO_NOTARY_PROFILE:-}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RELEASE_DIR="$ROOT_DIR/dist/release"
 export CLANG_MODULE_CACHE_PATH="${CLANG_MODULE_CACHE_PATH:-$ROOT_DIR/.build/clang-module-cache}"
-APP_BUNDLE="$RELEASE_DIR/$APP_NAME.app"
+PACKAGE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/$APP_NAME-package.XXXXXX")"
+APP_BUNDLE="$PACKAGE_DIR/$APP_NAME.app"
 APP_CONTENTS="$APP_BUNDLE/Contents"
 APP_MACOS="$APP_CONTENTS/MacOS"
 APP_RESOURCES="$APP_CONTENTS/Resources"
@@ -20,7 +21,14 @@ APP_BINARY="$APP_MACOS/$APP_NAME"
 INFO_PLIST="$APP_CONTENTS/Info.plist"
 ENTITLEMENTS="$ROOT_DIR/Resources/Halo.entitlements"
 ARCHIVE="$RELEASE_DIR/$APP_NAME-$VERSION-macOS.zip"
-CHECKSUM="$ARCHIVE.sha256"
+DMG="$RELEASE_DIR/$APP_NAME-$VERSION-macOS.dmg"
+ARCHIVE_CHECKSUM="$ARCHIVE.sha256"
+DMG_CHECKSUM="$DMG.sha256"
+
+cleanup() {
+  rm -rf "$PACKAGE_DIR"
+}
+trap cleanup EXIT
 
 if [[ -n "$NOTARY_PROFILE" && -z "$SIGN_IDENTITY" ]]; then
   echo "HALO_NOTARY_PROFILE requires HALO_SIGN_IDENTITY." >&2
@@ -31,7 +39,6 @@ mkdir -p "$CLANG_MODULE_CACHE_PATH"
 swift build -c release --product "$APP_NAME"
 BUILD_BINARY="$(swift build -c release --show-bin-path)/$APP_NAME"
 
-rm -rf "$APP_BUNDLE"
 mkdir -p "$APP_MACOS" "$APP_RESOURCES"
 cp "$BUILD_BINARY" "$APP_BINARY"
 cp "$ROOT_DIR/Resources/AppIcon.icns" "$APP_RESOURCES/AppIcon.icns"
@@ -96,6 +103,25 @@ package_archive() {
   ditto -c -k --norsrc --noextattr --noacl --keepParent "$APP_BUNDLE" "$ARCHIVE"
 }
 
+package_dmg() {
+  local staging_dir
+  staging_dir="$(mktemp -d "${TMPDIR:-/tmp}/$APP_NAME-dmg.XXXXXX")"
+  trap 'rm -rf "$staging_dir"' RETURN
+
+  ditto "$APP_BUNDLE" "$staging_dir/$APP_NAME.app"
+  ln -s /Applications "$staging_dir/Applications"
+  rm -f "$DMG"
+  hdiutil create \
+    -volname "$APP_NAME" \
+    -srcfolder "$staging_dir" \
+    -ov \
+    -format UDZO \
+    "$DMG"
+
+  rm -rf "$staging_dir"
+  trap - RETURN
+}
+
 package_archive
 
 if [[ -n "$NOTARY_PROFILE" ]]; then
@@ -106,10 +132,15 @@ if [[ -n "$NOTARY_PROFILE" ]]; then
   package_archive
 fi
 
+package_dmg
+
 (
   cd "$RELEASE_DIR"
-  shasum -a 256 "$(basename "$ARCHIVE")" >"$(basename "$CHECKSUM")"
+  shasum -a 256 "$(basename "$ARCHIVE")" >"$(basename "$ARCHIVE_CHECKSUM")"
+  shasum -a 256 "$(basename "$DMG")" >"$(basename "$DMG_CHECKSUM")"
 )
 
 echo "$ARCHIVE"
-echo "$CHECKSUM"
+echo "$ARCHIVE_CHECKSUM"
+echo "$DMG"
+echo "$DMG_CHECKSUM"

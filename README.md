@@ -2,7 +2,7 @@
 
 Halo is a native macOS menu bar companion for Spotify. It shows time-synced lyrics and optional audio-reactive ambient lighting while Spotify remains the playback app.
 
-**Website:** https://zeiprone.github.io/Halo/
+**Downloads:** [GitHub Releases](https://github.com/zeiprone/Halo/releases) — signed and notarized DMG installers will be published here.
 
 ![Platform](https://img.shields.io/badge/platform-macOS%2015%2B-000000?logo=apple&logoColor=white)
 ![Swift](https://img.shields.io/badge/Swift-6.0-F05138?logo=swift&logoColor=white)
@@ -58,7 +58,7 @@ Create an ad-hoc-signed archive for local validation:
 ./script/package_release.sh
 ```
 
-The archive and SHA-256 checksum are written to `dist/release/`. Public downloads should be signed with a Developer ID certificate and notarized by Apple. Maintainer instructions are in [docs/RELEASING.md](docs/RELEASING.md).
+The ZIP, drag-and-drop DMG, and SHA-256 checksums are written to `dist/release/`. Public downloads should be signed with a Developer ID certificate and notarized by Apple. Maintainer instructions are in [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Privacy
 
