@@ -43,4 +43,4 @@ The script stops on signing, notarization, stapling, or validation failures. It 
    - `Halo-<version>-macOS.dmg` and `Halo-<version>-macOS.dmg.sha256` for the primary drag-and-drop installation path.
    - `Halo-<version>-macOS.zip` and `Halo-<version>-macOS.zip.sha256` for users who prefer a portable archive.
 6. Mark the DMG as the release's primary downloadable asset and include its checksum in the release notes.
-7. Install the published DMG on a second Mac and verify Spotify Automation, audio-capture permission, lyrics, and notch playback controls.
+7. Install the published DMG on a second Mac and verify Spotify and YouTube Music Automation, audio-capture permission, lyrics, and notch playback controls. Test YouTube Music in both Safari and Google Chrome; Safari requires **Develop → Allow JavaScript from Apple Events**.

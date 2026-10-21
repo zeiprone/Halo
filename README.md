@@ -40,6 +40,23 @@ Halo is an independent project and is not affiliated with Spotify, YouTube, or G
 
 Building from source additionally requires Xcode 16 or later, including Command Line Tools.
 
+## Install a release
+
+When a signed Halo release is available:
+
+1. Open the latest [GitHub Release](https://github.com/zeiprone/Halo/releases) and download `Halo-<version>-macOS.dmg`.
+2. Open the DMG and drag **Halo** into **Applications**.
+3. Launch Halo, then start music in Spotify or in a YouTube Music tab.
+
+The first public installer is still being prepared. Until then, use the source build below rather than an ad-hoc archive; only a Developer ID-signed and Apple-notarized DMG is suitable for end users.
+
+## First-time setup
+
+1. Start Spotify's desktop app, or open `music.youtube.com` in Safari or Google Chrome.
+2. Launch Halo and allow macOS Automation access when prompted. This lets Halo read the active track and send playback controls only to your chosen player.
+3. For YouTube Music in Safari, turn on **Develop → Allow JavaScript from Apple Events**. Chrome needs only the normal macOS Automation approval.
+4. Enable **Lyrics overlay** or **Dynamic lights** from Halo's menu bar. macOS may request permission before system-audio analysis begins.
+
 ## Run from source
 
 ```bash
@@ -75,6 +92,16 @@ Create an ad-hoc-signed archive for local validation:
 ```
 
 The ZIP, drag-and-drop DMG, and SHA-256 checksums are written to `dist/release/`. Public downloads should be signed with a Developer ID certificate and notarized by Apple. Maintainer instructions are in [docs/RELEASING.md](docs/RELEASING.md).
+
+## Troubleshooting
+
+**Halo cannot see YouTube Music.** Keep a `music.youtube.com` tab open in Safari or Google Chrome, then grant Halo permission in **System Settings → Privacy & Security → Automation**. In Safari, also enable **Develop → Allow JavaScript from Apple Events**.
+
+**Controls target the wrong service.** Halo chooses a source that is actively playing. If both Spotify and YouTube Music play at once, Spotify takes priority; pause the other service and Halo will switch on its next refresh.
+
+**Dynamic lights react to unrelated browser sound.** YouTube Music audio is captured from its browser process, so sound from another tab in that same browser may influence the visual response. Use a separate browser profile/window, or pause other browser media.
+
+**Lyrics are missing or out of time.** Halo queries LRCLIB using the current title and artist. Some tracks have no synced entry; use the Studio timing control to compensate for a known offset, then retry the lookup.
 
 ## Privacy
 
