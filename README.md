@@ -1,6 +1,6 @@
 # Halo
 
-Halo is a native macOS menu bar companion for Spotify. It shows time-synced lyrics and optional audio-reactive ambient lighting while Spotify remains the playback app.
+Halo is a native macOS menu bar companion for Spotify and YouTube Music. It shows time-synced lyrics and optional audio-reactive ambient lighting while your music service remains the playback app.
 
 **Downloads:** [GitHub Releases](https://github.com/zeiprone/Halo/releases) — signed and notarized DMG installers will be published here.
 
@@ -10,7 +10,7 @@ Halo is a native macOS menu bar companion for Spotify. It shows time-synced lyri
 
 ## Preview
 
-Halo keeps Spotify as the player while bringing lyrics and reactive light to your desktop.
+Halo keeps your player in charge while bringing lyrics and reactive light to your desktop.
 
 | Resting lyrics overlay | Audio-reactive lyrics overlay |
 | --- | --- |
@@ -24,18 +24,19 @@ These previews are rendered by Halo's SwiftUI visual check with local fixture ly
 
 ## What it does
 
-- Reads local Spotify playback metadata and provides playback controls through macOS Automation.
+- Reads local Spotify playback metadata and controls Spotify through macOS Automation.
+- Reads and controls an open YouTube Music tab in Safari or Google Chrome through macOS Automation.
 - Fetches lyrics from [LRCLIB](https://lrclib.net/) and renders synchronized lyrics when available.
 - Displays optional, click-through lyrics and ambient-lighting overlays.
 - Includes a mini player docked to the MacBook notch. Hover to reveal playback controls; the menu bar toggle hides it.
-- Analyses Spotify audio in memory only when Audio Reactive mode is enabled.
+- Analyses the active player or browser audio in memory only when Audio Reactive mode is enabled.
 
-Halo is an independent project and is not affiliated with Spotify. Spotify is required and its desktop app must be running.
+Halo is an independent project and is not affiliated with Spotify, YouTube, or Google. Use either Spotify's desktop app or YouTube Music in Safari or Google Chrome.
 
 ## Requirements
 
 - macOS 15 or later
-- Spotify desktop app
+- Spotify desktop app, or YouTube Music open in Safari or Google Chrome
 
 Building from source additionally requires Xcode 16 or later, including Command Line Tools.
 
@@ -47,7 +48,7 @@ cd Halo
 ./script/build_and_run.sh
 ```
 
-The script builds a local `dist/Halo.app` bundle and launches it. The first use of Spotify controls or audio-reactive lighting may prompt for macOS permissions.
+The script builds a local `dist/Halo.app` bundle and launches it. The first use of player controls or audio-reactive lighting may prompt for macOS permissions. Safari users may also need to enable **Develop → Allow JavaScript from Apple Events** so Halo can read and control their YouTube Music tab.
 
 Useful development commands:
 
@@ -77,7 +78,7 @@ The ZIP, drag-and-drop DMG, and SHA-256 checksums are written to `dist/release/`
 
 ## Privacy
 
-Halo has no accounts, analytics, backend, audio uploads, or audio recording. Spotify audio analysis stays in memory. Lyrics are requested from LRCLIB using the current track metadata; cached lyric timelines are stored in your macOS cache directory.
+Halo has no accounts, analytics, backend, audio uploads, or audio recording. Player audio analysis stays in memory. Lyrics are requested from LRCLIB using the current track metadata; cached lyric timelines are stored in your macOS cache directory.
 
 See [the architecture notes](docs/ARCHITECTURE.md) for the design and [the feasibility notes](docs/FEASIBILITY.md) for platform and third-party-service considerations.
 

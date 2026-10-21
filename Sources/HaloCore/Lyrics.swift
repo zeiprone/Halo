@@ -339,11 +339,11 @@ public final class LyricsManager: ObservableObject {
 
     public func loadLyrics(for track: Track?, force: Bool = false) {
         if track == nil {
-            guard loadedTrackID != nil || status != "Waiting for a Spotify track." else { return }
+            guard loadedTrackID != nil || status != "Waiting for a music track." else { return }
             loadTask?.cancel()
             loadedTrackID = nil
             timeline = .empty
-            status = "Waiting for a Spotify track."
+            status = "Waiting for a music track."
             return
         }
         let changed = loadedTrackID != track?.identity

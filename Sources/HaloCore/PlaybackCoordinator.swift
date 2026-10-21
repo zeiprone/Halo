@@ -12,7 +12,7 @@ public final class PlaybackCoordinator: ObservableObject {
     public init(provider: MusicProvider, pollInterval: Duration = .milliseconds(900)) {
         self.provider = provider
         self.pollInterval = pollInterval
-        self.observation = PlaybackObservation(track: nil, state: .unavailable, position: 0, statusMessage: "Waiting for Spotify.")
+        self.observation = PlaybackObservation(track: nil, state: .unavailable, position: 0, statusMessage: "Waiting for Spotify or YouTube Music.")
     }
 
     deinit {

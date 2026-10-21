@@ -24,4 +24,28 @@ final class PlaybackCoordinatorTests: XCTestCase {
         XCTAssertEqual(coordinator.currentTrack, second)
         XCTAssertLessThan(coordinator.interpolatedPosition, 4)
     }
+
+    func testParsesYouTubeMusicBrowserMetadata() throws {
+        let separator = "\u{1F}"
+        let response = [
+            "Night Drive",
+            "Example Artist",
+            "Example Album",
+            "213.5",
+            "41.25",
+            "playing",
+            "https://i.ytimg.com/vi/example/maxresdefault.jpg",
+            "https://music.youtube.com/watch?v=example"
+        ].joined(separator: separator)
+
+        let observation = try YouTubeMusicProvider.parse(response, source: .youTubeMusicChrome)
+
+        XCTAssertEqual(observation.source, .youTubeMusicChrome)
+        XCTAssertEqual(observation.state, .playing)
+        XCTAssertEqual(observation.track?.title, "Night Drive")
+        XCTAssertEqual(observation.track?.artist, "Example Artist")
+        XCTAssertEqual(observation.track?.duration, 213.5)
+        XCTAssertEqual(observation.position, 41.25)
+        XCTAssertEqual(observation.track?.identity, "ytm|https://music.youtube.com/watch?v=example")
+    }
 }

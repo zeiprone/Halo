@@ -42,10 +42,10 @@ private struct PlaybackMenuContent: View {
     @ObservedObject var playback: PlaybackCoordinator
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(playback.currentTrack?.title ?? "Waiting for Spotify")
+            Text(playback.currentTrack?.title ?? "Waiting for music")
                 .font(.headline)
                 .lineLimit(2)
-            Text(playback.currentTrack?.artist ?? playback.observation.statusMessage ?? "Start a track in Spotify.")
+            Text(playback.currentTrack?.artist ?? playback.observation.statusMessage ?? "Start a track in Spotify or YouTube Music.")
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
             if let error = playback.lastError {

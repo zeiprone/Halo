@@ -92,15 +92,16 @@ private final class AudioFeatureMailbox: @unchecked Sendable {
 private let haloAudioIOProc: AudioDeviceIOProc = {
     _, _, inputData, _, _, _, context in
     guard let context else { return noErr }
-    let engine = Unmanaged<SpotifyAudioCaptureEngine>.fromOpaque(context).takeUnretainedValue()
+    let engine = Unmanaged<AppAudioCaptureEngine>.fromOpaque(context).takeUnretainedValue()
     engine.consume(inputData)
     return noErr
 }
 
-final class SpotifyAudioCaptureEngine: @unchecked Sendable {
+final class AppAudioCaptureEngine: @unchecked Sendable {
     private struct ControlState {
         var running = false
         var status = "Audio reactive mode is ready."
+        var source: MusicSource?
     }
 
     private let mailbox = AudioFeatureMailbox()
@@ -117,9 +118,9 @@ final class SpotifyAudioCaptureEngine: @unchecked Sendable {
         stopSynchronously()
     }
 
-    func start() {
+    func start(for source: MusicSource?) {
         queue.async { [weak self] in
-            self?.startSynchronously()
+            self?.startSynchronously(for: source)
         }
     }
 
@@ -137,23 +138,28 @@ final class SpotifyAudioCaptureEngine: @unchecked Sendable {
         mailbox.process(inputData)
     }
 
-    private func startSynchronously() {
-        guard !isRunning else { return }
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == "com.spotify.client" }) else {
-            setStatus("Spotify is not running; waiting to start audio capture.")
+    private func startSynchronously(for source: MusicSource?) {
+        guard let source else {
+            setStatus("Waiting for a music source before starting audio capture.")
+            return
+        }
+        if isRunning, control.withLock({ $0.source == source }) { return }
+        if isRunning { cleanup() }
+        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == source.applicationBundleIdentifier }) else {
+            setStatus("\(source.displayName) is not running; waiting to start audio capture.")
             return
         }
         guard let processObject = Self.audioProcessObject(for: app.processIdentifier) else {
-            setStatus("Spotify audio process is not available yet.")
+            setStatus("\(source.displayName) audio process is not available yet.")
             return
         }
 
         let description = CATapDescription(monoMixdownOfProcesses: [processObject])
         if #available(macOS 26.0, *) {
-            description.bundleIDs = ["com.spotify.client"]
+            description.bundleIDs = [source.applicationBundleIdentifier]
             description.isProcessRestoreEnabled = true
         }
-        description.name = "Halo Spotify audio analysis"
+        description.name = "Halo \(source.displayName) audio analysis"
         description.uuid = UUID()
         description.isPrivate = true
         description.muteBehavior = .unmuted
@@ -196,7 +202,8 @@ final class SpotifyAudioCaptureEngine: @unchecked Sendable {
 
         control.withLock {
             $0.running = true
-            $0.status = "Listening to Spotify audio."
+            $0.source = source
+            $0.status = "Listening to \(source.displayName) audio."
         }
     }
 
@@ -220,7 +227,10 @@ final class SpotifyAudioCaptureEngine: @unchecked Sendable {
             AudioHardwareDestroyProcessTap(tapID)
             tapID = kAudioObjectUnknown
         }
-        control.withLock { $0.running = false }
+        control.withLock {
+            $0.running = false
+            $0.source = nil
+        }
     }
 
     private func setStatus(_ status: String) {

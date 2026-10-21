@@ -1,6 +1,6 @@
 # Halo Architecture
 
-Halo is a native SwiftUI/AppKit macOS menu bar app. Spotify remains the playback engine; Halo observes playback, loads lyrics, and renders visual overlays.
+Halo is a native SwiftUI/AppKit macOS menu bar app. Spotify or YouTube Music remains the playback engine; Halo observes playback, loads lyrics, and renders visual overlays.
 
 ## Modules
 
@@ -11,11 +11,11 @@ Halo is a native SwiftUI/AppKit macOS menu bar app. Spotify remains the playback
 
 `PlaybackCoordinator` is the single authoritative playback state. It receives periodic `PlaybackObservation` values from a `MusicProvider`, stores the latest position and observation timestamp, and interpolates current position using `ContinuousClock`.
 
-Lyrics and overlays consume `PlaybackCoordinator`; they do not query Spotify independently.
+Lyrics and overlays consume `PlaybackCoordinator`; they do not query a music service independently.
 
-## Spotify
+## Music sources
 
-`SpotifyProvider` uses AppleScript via Apple Events. It reads track metadata and playback state in one round trip and exposes commands for play/pause, previous, next, and seeking.
+`SpotifyProvider` uses AppleScript via Apple Events. It reads track metadata and playback state in one round trip and exposes commands for play/pause, previous, next, and seeking. `YouTubeMusicProvider` uses the documented Safari and Google Chrome AppleScript bridges to read and control only an open `music.youtube.com` tab. `AutomaticMusicProvider` chooses an actively playing source, preferring Spotify only if both play at once.
 
 ## Lyrics
 
@@ -31,7 +31,7 @@ Desktop overlays are transparent non-activating `NSPanel` windows:
 - Ambient overlay: one click-through perimeter gradient per connected display.
 - Notch player: an interactive status-level panel with compact and expanded layouts.
 
-`SpotifyAudioCaptureEngine` owns the CoreAudio process tap and private aggregate device. Its real-time callback publishes only smoothed audio features; SwiftUI never receives or stores raw audio samples. Capture runs only while Spotify is playing and Audio Reactive mode is enabled.
+`AppAudioCaptureEngine` owns the CoreAudio process tap and private aggregate device. Its real-time callback publishes only smoothed audio features; SwiftUI never receives or stores raw audio samples. Capture runs only while the selected source is playing and Audio Reactive mode is enabled. For YouTube Music, the browser process is captured, so other audio playing in that browser can also influence the effect.
 
 Window levels are intentionally conservative. Lock-screen rendering is behind `LockScreenAdapter` and disabled by default.
 

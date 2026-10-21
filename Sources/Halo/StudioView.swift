@@ -35,7 +35,7 @@ private struct NowPlayingHeader: View {
             Image(nsImage: AppIcon.image).resizable().frame(width: 44, height: 44)
             VStack(alignment: .leading, spacing: 3) {
                 Text(playback.currentTrack?.title ?? "Halo").font(.headline).lineLimit(1)
-                Text(playback.currentTrack?.artist ?? "Waiting for Spotify").foregroundStyle(.secondary).lineLimit(1)
+                Text(playback.currentTrack?.artist ?? "Waiting for music").foregroundStyle(.secondary).lineLimit(1)
             }
             Spacer()
             Button { playback.playPause() } label: {

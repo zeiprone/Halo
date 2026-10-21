@@ -159,7 +159,7 @@ struct NotchIslandView: View {
                     Text(playback.currentTrack?.title ?? "Halo is ready")
                         .font(.system(size: 17, weight: .bold))
                         .lineLimit(1)
-                    Text(playback.currentTrack?.artist ?? "Start Spotify to play music")
+                    Text(playback.currentTrack?.artist ?? "Start Spotify or YouTube Music to play music")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.58))
                         .lineLimit(1)

@@ -92,12 +92,12 @@ final class AppState: ObservableObject {
     @Published private(set) var albumPalette = HaloPalette.fallback
     @Published private(set) var albumArtwork: NSImage?
     @Published private(set) var audioStatus = "Waiting for playback"
-    let playback = PlaybackCoordinator(provider: SpotifyProvider())
+    let playback = PlaybackCoordinator(provider: AutomaticMusicProvider())
     let lyrics = LyricsManager(provider: LRCLIBProvider())
     let motion = VisualMotion()
     let overlayManager = OverlayManager()
     let lockScreenAdapter = SafeLockScreenAdapter()
-    let audioCapture = SpotifyAudioCaptureEngine()
+    let audioCapture = AppAudioCaptureEngine()
     private var trackID: String?
     private var paletteTask: Task<Void, Never>?
     private var captureRequested = false
@@ -172,7 +172,7 @@ final class AppState: ObservableObject {
         let now = ProcessInfo.processInfo.systemUptime
         if shouldCapture && !audioCapture.isRunning && now >= nextCaptureAttempt {
             nextCaptureAttempt = now + 1.5
-            audioCapture.start()
+            audioCapture.start(for: playback.observation.source)
         } else if !shouldCapture && captureRequested {
             audioCapture.stop()
             nextCaptureAttempt = 0
